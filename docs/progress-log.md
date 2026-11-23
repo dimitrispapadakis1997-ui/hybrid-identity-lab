@@ -40,3 +40,18 @@ One entry per work session: what I did, what broke, how I fixed it. Add screensh
 - **Fix:** Cancelled the dialog; it is the normal Windows Server prompt that asks for a restart reason.
 - **Lesson:** Saving the VM state (close the window, "Save the machine state") is a quick way to pause the lab and resume exactly where it stopped.
 - **Next:** Create the test users (`02-create-test-users.ps1`), set up the Entra ID tenant, add the alternate UPN suffix, then install Microsoft Entra Connect.
+
+### 2026-11-23: Steps 3 and 4, Entra ID tenant, UPN suffix and test users
+
+- **Done:**
+  - Created a free Azure account, which creates a default Microsoft Entra ID tenant (license: Microsoft Entra ID Free). Its primary domain is of the form `<name>.onmicrosoft.com`.
+  - Created a cloud-only administrator account in the tenant (`labadmin`, Global Administrator) for Microsoft Entra Connect. A personal Microsoft account cannot be used for that, because it is an external identity in the tenant.
+  - Added the tenant domain as an alternate UPN suffix in the on-prem forest:
+    `Set-ADForest -Identity lab.local -UPNSuffixes @{Add='<name>.onmicrosoft.com'}`
+  - Ran `scripts/02-create-test-users.ps1 -UpnSuffix <name>.onmicrosoft.com`: created `test.user1`, `test.user2` and `test.user3` in `OU=Users,OU=Lab`, with UPNs on the tenant domain. The password is typed at a prompt and never stored.
+- **Problem:** The first sign-in to the Entra admin center with a personal Microsoft account failed: "user account does not exist in tenant 'Microsoft Services'".
+- **Fix:** A personal account has no tenant of its own. Signing up for a free Azure account created the directory. The Microsoft 365 Developer Program was not an option, because it requires a Visual Studio subscription or a qualifying program.
+- **Problem:** The Entra admin center showed a stale user list right after creating the user, so the new account looked missing.
+- **Fix:** A full page reload showed the account; creating it a second time was blocked by "User principal name already exists".
+- **Lesson:** A free Azure sign-up asks for a card for identity verification. I did not create any paid resources.
+- **Next:** Install Microsoft Entra Connect on DC01 with password hash synchronization, scoped to `OU=Lab` first, then verify the synced users and test cloud sign-in.
