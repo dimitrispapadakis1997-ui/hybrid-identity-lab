@@ -28,8 +28,8 @@ Build and document a small hybrid identity environment, the same pattern many co
 - [x] 2. Install AD DS and DNS, promote the first domain controller
 - [x] 3. Create the OU structure, groups and test users ([scripts](scripts/))
 - [x] 4. Set up the Entra ID tenant and add an alternate UPN suffix matching the tenant domain
-- [ ] 5. Install Microsoft Entra Connect and enable password hash synchronization
-- [ ] 6. Verify synced users and test cloud sign-in
+- [x] 5. Install Microsoft Entra Connect and enable password hash synchronization
+- [x] 6. Verify synced users and test cloud sign-in
 - [ ] 7. Join a client machine to the domain and test sign-in
 - [ ] 8. Document issues, fixes and lessons learned
 
