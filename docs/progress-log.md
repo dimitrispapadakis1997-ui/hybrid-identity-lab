@@ -55,3 +55,19 @@ One entry per work session: what I did, what broke, how I fixed it. Add screensh
 - **Fix:** A full page reload showed the account; creating it a second time was blocked by "User principal name already exists".
 - **Lesson:** A free Azure sign-up asks for a card for identity verification. I did not create any paid resources.
 - **Next:** Install Microsoft Entra Connect on DC01 with password hash synchronization, scoped to `OU=Lab` first, then verify the synced users and test cloud sign-in.
+
+### 2026-11-24: Steps 5 and 6, Microsoft Entra Connect installed, users synced, cloud sign-in verified
+
+- **Done:**
+  - Installed Microsoft Entra Connect Sync 2.6.92.0 on DC01 with custom settings: password hash synchronization, Entra Connect creates its own AD connector account, and the cloud-only Global Administrator is used for the tenant connection.
+  - Limited the sync scope to `OU=Lab` only (Domain/OU filtering), so the built-in containers and domain controllers stay on-prem.
+  - Let the wizard run the first synchronization. `test.user1`, `test.user2` and `test.user3` appeared in the Entra admin center, with UPNs on the tenant domain and a creation time matching the end of the wizard, so they came from the sync and not from the portal.
+  - Signed in to the cloud as `test.user1` with the on-prem AD password: the account shows up as signed in, so password hash sync works.
+- **Problem:** The Entra Connect installer is no longer offered on the Microsoft Download Center (only a decommission notice), and the download link returned an HTML page.
+- **Fix:** Downloaded the installer from the Entra Connect page of the Entra admin center on the host, checked its Microsoft digital signature, and shared it into the VM through a read-only VirtualBox shared folder. The VM's Edge is too old for the portal, so downloading inside the VM was not an option.
+- **Problem:** The "AD forest account" step failed with "The user name or password is incorrect".
+- **Fix:** The credentials field had kept the old text and my paste was appended to it. After clearing the field and entering `LAB.LOCAL\Administrator` plus the correct password, the step passed. Lesson: clear a field before pasting, and type the password by hand.
+- **Problem:** The sign-in page showed "Not Added" for both UPN suffixes, even for the tenant's `.onmicrosoft.com` domain, which is always verified.
+- **Fix:** Ticked "Continue without matching all UPN suffixes to verified domains". The users still synced with the right UPN, so the warning was only cosmetic here.
+- **Lesson:** The wizard warns that the AD Recycle Bin is not enabled and recommends a TPM. Both are normal for a lab VM.
+- **Next:** Create the Windows 11 client VM on the internal network, point its DNS to `10.10.10.10`, join it to `lab.local` and test a domain sign-in with a test user. Then write the final documentation.
