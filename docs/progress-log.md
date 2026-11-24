@@ -91,3 +91,17 @@ One entry per work session: what I did, what broke, how I fixed it. Add screensh
 - **Fix:** Turned on Devices > Shared Clipboard > Host To Guest in the VM window.
 - **Lesson:** Evaluation licenses: Windows Server 2022 for 180 days, Windows 11 Enterprise for 90 days. Both are free and fine for a lab.
 - **Next:** Final cleanup: change the lab passwords, optionally take VM snapshots, add screenshots (with names, IDs and emails blurred), and write the lessons learned in the README.
+
+### 2026-11-24: Documentation, screenshots and architecture diagram
+
+- **Done:**
+  - Took screenshots of the finished lab and added them to `docs/images/`, with captions in [screenshots.md](screenshots.md): the OU structure and test users in Active Directory Users and Computers, `CLIENT01` in `OU=Lab\Computers`, the domain sign-in on `CLIENT01`, the Synchronization Service Manager on DC01 (24 runs, all `success`), and `Test User1` in the Entra admin center with "On-premises sync enabled: Yes".
+  - Blurred everything that identifies the tenant: the tenant connector name, the immutable ID and email addresses.
+  - Drew an architecture diagram of the lab and added it to the README.
+  - Saved the machine state of both VMs, so the lab resumes where it stopped.
+- **Problem:** DC01 kept locking and sometimes showed a black screen, and Ctrl+Alt+Del from the VirtualBox menu did not always reach the sign-in screen.
+- **Fix:** Closing the VM with "Save the machine state" and starting it again brought the sign-in screen back. The password is always typed by hand.
+- **Problem:** The Entra user list in the narrow browser pane cut off the UPN column and hid the sync status.
+- **Fix:** Opened the user's Properties page instead: the On-premises section shows the sync flag, the last sync time and the on-prem distinguished name.
+- **Lesson:** A screenshot of the Synchronization Service Manager and of the on-premises properties of a synced user is better evidence of a working hybrid setup than a bare user list.
+- **Next:** Change the lab passwords, then start the next project: the same identity ideas in the cloud.
