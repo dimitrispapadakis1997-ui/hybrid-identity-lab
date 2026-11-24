@@ -24,7 +24,13 @@ Signed in as `lab\test.user1` on `CLIENT01`, domain `lab.local`, with the NAT ad
 
 ![whoami and ipconfig on CLIENT01](images/07-client01-domain-login.png)
 
-## 4. The same user in Microsoft Entra ID
+## 4. Synchronization on DC01
+
+Synchronization Service Manager on DC01: 24 runs, every Import, Delta Synchronization and Export run on the `lab.local` and tenant connectors finished with status `success` (the tenant connector name is blurred):
+
+![Synchronization Service Manager, all runs successful](images/04-dc01-sync-service-manager.png)
+
+## 5. The same user in Microsoft Entra ID
 
 `Test User1` in the Entra admin center: "On-premises sync enabled: Yes", last sync time, distinguished name `CN=Test User1,OU=Users,OU=Lab,...` and SAM account name `test.user1`. The account came from the on-prem directory through Entra Connect, not from the portal (immutable ID blurred):
 
