@@ -71,3 +71,23 @@ One entry per work session: what I did, what broke, how I fixed it. Add screensh
 - **Fix:** Ticked "Continue without matching all UPN suffixes to verified domains". The users still synced with the right UPN, so the warning was only cosmetic here.
 - **Lesson:** The wizard warns that the AD Recycle Bin is not enabled and recommends a TPM. Both are normal for a lab VM.
 - **Next:** Create the Windows 11 client VM on the internal network, point its DNS to `10.10.10.10`, join it to `lab.local` and test a domain sign-in with a test user. Then write the final documentation.
+
+### 2026-11-24: Steps 1 and 7, Windows 11 client joined to the domain, domain sign-in verified
+
+- **Done:**
+  - Created the VM `CLIENT01` in VirtualBox: Windows 11 Enterprise Evaluation, 4 GB RAM, 2 vCPUs, 80 GB disk, EFI, TPM 2.0 and Secure Boot (VirtualBox provides them for a Windows 11 guest). The unattended install created a local administrator and installed the Guest Additions.
+  - Added a second network adapter on the internal network `intnet` (after the install, with the VM powered off), renamed it `LAB`, and gave it a static IP: `10.10.10.20/24`, DNS `10.10.10.10` (DC01) on every adapter.
+  - Checked the connection to the DC: ping to `10.10.10.10` works and `Resolve-DnsName lab.local` returns the domain controller.
+  - Joined the machine to the domain, into the Lab computers OU:
+    `Add-Computer -DomainName lab.local -Credential LAB\Administrator -OUPath 'OU=Computers,OU=Lab,DC=lab,DC=local' -Restart`
+    The credentials are typed in the prompt window, never in the command.
+  - Signed in to CLIENT01 as the domain user `LAB\test.user1` (the Start menu shows `test.user1`). The same account, with the same password, also signs in to the Microsoft cloud, which is the point of the lab.
+  - Changed the interface language of VirtualBox to English, and opened the Entra admin center with `?l=en.en-us`, so that screenshots are readable for everyone.
+- **Problem:** `lab.local` also resolves to `10.0.2.15`, the NAT address of DC01, because the DC registers every adapter in DNS.
+- **Fix:** Not needed here, since the join and the sign-in worked. In a production design I would disable DNS registration on the NAT adapter of the DC, or give it only one network card.
+- **Problem:** Windows 11 kept signing in automatically as the local administrator, because the unattended install turns on auto-logon.
+- **Fix:** Set the Winlogon value `AutoAdminLogon` to `0` and removed `DefaultPassword`. After that, "Other user" on the sign-in screen accepted the domain account.
+- **Problem:** Pasting into the guest did nothing at first.
+- **Fix:** Turned on Devices > Shared Clipboard > Host To Guest in the VM window.
+- **Lesson:** Evaluation licenses: Windows Server 2022 for 180 days, Windows 11 Enterprise for 90 days. Both are free and fine for a lab.
+- **Next:** Final cleanup: change the lab passwords, optionally take VM snapshots, add screenshots (with names, IDs and emails blurred), and write the lessons learned in the README.
