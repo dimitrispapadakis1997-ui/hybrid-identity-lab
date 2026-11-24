@@ -2,6 +2,10 @@
 
 Evidence for the lab results. Tenant names, emails and IDs are blurred. Image files live in `docs/images/`.
 
+## Architecture
+
+![Hybrid identity lab architecture](images/06-architecture-diagram.png)
+
 ## 1. On-premises Active Directory (DC01)
 
 OU structure `OU=Lab` with the child OUs Admins, Computers, Groups and Users, and the three test users in `OU=Users`:
@@ -19,3 +23,9 @@ OU structure `OU=Lab` with the child OUs Admins, Computers, Groups and Users, an
 Signed in as `lab\test.user1` on `CLIENT01`, domain `lab.local`, with the NAT address and the internal lab address `10.10.10.20`:
 
 ![whoami and ipconfig on CLIENT01](images/07-client01-domain-login.png)
+
+## 4. The same user in Microsoft Entra ID
+
+`Test User1` in the Entra admin center: "On-premises sync enabled: Yes", last sync time, distinguished name `CN=Test User1,OU=Users,OU=Lab,...` and SAM account name `test.user1`. The account came from the on-prem directory through Entra Connect, not from the portal (immutable ID blurred):
+
+![Test User1 on-premises properties in Entra ID](images/05-entra-test-user1-onprem-sync.png)
