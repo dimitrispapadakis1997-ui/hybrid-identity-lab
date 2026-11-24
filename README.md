@@ -2,13 +2,15 @@
 
 A home lab that connects an on-premises Active Directory domain to a Microsoft Entra ID tenant, so users are created on-prem and sign in to cloud services with the same identity.
 
-**Status:** complete. See the [progress log](docs/progress-log.md) for every step, problem and fix.
+**Status:** complete. See the [progress log](docs/progress-log.md) for every step, problem and fix, and the [screenshots](docs/screenshots.md) for the evidence.
 
 ## Goal
 
 Build and document a small hybrid identity environment, the same pattern many companies use when moving from on-prem to Microsoft 365 and Azure.
 
 ## Architecture
+
+![Hybrid identity lab architecture](docs/images/06-architecture-diagram.png)
 
 ```
 +----------------------------+          +--------------------------+
@@ -62,7 +64,9 @@ Everything runs in VirtualBox on one Windows 11 laptop (16 GB RAM).
 .
 ├── README.md
 ├── docs/
-│   └── progress-log.md
+│   ├── progress-log.md
+│   ├── screenshots.md
+│   └── images/
 └── scripts/
     ├── 01-create-ou-structure.ps1
     └── 02-create-test-users.ps1
